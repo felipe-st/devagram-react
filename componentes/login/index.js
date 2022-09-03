@@ -18,6 +18,7 @@ export default function Login() {
                     src={imagemLogo}
                     alt='logotipo'
                     layout='fill'
+                    className="logo"
                 />
             </div>
             <div className="conteudoPaginaPublica">
@@ -47,7 +48,7 @@ export default function Login() {
 
                 <div className="rodapePaginaPublica">
                     <p>Não possui uma conta?</p>
-                    <Link href='/cadastro'>Faça seu cadastro agora/</Link>
+                    <Link href='/cadastro'>Faça seu cadastro agora!</Link>
                 </div>
             </div>
         </section>
