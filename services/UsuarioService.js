@@ -8,7 +8,7 @@ export default class UsuarioService extends HttpService {
         localStorage.setItem('email', data.email);
         localStorage.setItem('token', data.token);
 
-        const usuario = await this.get('/usuario');
+        const usuario = await this.get('/usuarios');
         localStorage.setItem('id', usuario.data._id);
         
         if (usuario.data.avatar) {
@@ -19,5 +19,9 @@ export default class UsuarioService extends HttpService {
 
     async cadastro(dados) {
         return this.post('/cadastro', dados);
+    }
+
+    estaAutenticado() {
+        return localStorage.getItem('token') !== null;
     }
 }
