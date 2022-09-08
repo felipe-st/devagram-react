@@ -4,12 +4,15 @@ export default class UsuarioService extends HttpService {
     async login(credenciais) {
         const { data } = await this.post('/login', credenciais);
 
-        localStorage.setItem('nome', data.nome, );
+        localStorage.setItem('nome', data.nome);
         localStorage.setItem('email', data.email);
         localStorage.setItem('token', data.token);
+
+        const usuario = await this.get('/usuario');
+        localStorage.setItem('id', usuario.data._id);
         
-        if (data.avatar) {
-            localStorage.setItem('avatar', data.avatar);
+        if (usuario.data.avatar) {
+            localStorage.setItem('avatar', usuario.data.avatar);
         }
 
     }
