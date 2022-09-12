@@ -7,7 +7,7 @@ export default function Cabecalho() {
     return (
         <header className='cabecalhoPrincipal'>
             <div className="conteudoCabecalhoPrincipal">
-                <div className="logocabecalhoPrincipal">
+                <div className="logoCabecalhoPrincipal">
                     <Image
                         src={logoHorizontalImg}
                         alt='logo devagram'
