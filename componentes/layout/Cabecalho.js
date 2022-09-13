@@ -9,14 +9,38 @@ export default function Cabecalho() {
     const [resultadoPesquisa, setResultadoPesquisa] = useState([]);
     const [termoPesquisado, setTermoPesquisado] = useState([]);
 
-    const aoClicarResultadoDaPesquisa = (id) => {
-        console.log('aoClicarResultadoDaPesquisa', {id});
+    const aoPesquisar = (e) => {
+        setTermoPesquisado(e.target.value);
+        setResultadoPesquisa([]);
 
         if (termoPesquisado.length < 3) {
             return;
         }
 
-        setRe
+        setResultadoPesquisa([
+            {
+                avatar: '',
+                nome: 'Minerva',
+                email: 'minerva@gmail.com',
+                _id: '12345'
+            },
+            {
+                avatar: '',
+                nome: 'Pallas',
+                email: 'pallas@gmail.com',
+                _id: '54321'
+            },
+            {
+                avatar: '',
+                nome: 'Pitty',
+                email: 'pitty@gmail.com',
+                _id: '987654'
+            },
+        ])
+    }
+
+    const aoClicarResultadoDaPesquisa = (id) => {
+        console.log('aoClicarResultadoDaPesquisa', {id});        
     }
 
     return (
@@ -41,7 +65,7 @@ export default function Cabecalho() {
                         type='text'
                         placeholder='Pesquisar'
                         value={termoPesquisado}
-                        onChange={(e) => setTermoPesquisado(e.target.value)}
+                        onChange={aoPesquisar}
                     />
                 </div>
 

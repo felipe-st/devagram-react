@@ -5,7 +5,7 @@ export default function ResultadoPesquisa({ nome, email, avatar, onClick }) {
         <div className="resultadoPesquisa" onClick={() => onClick(id)}>
             <Avatar src={avatar} />
             <div className="informacoesUsuario">
-                <strong>{ nome }</strong>
+                <strong>{nome}</strong>
                 <span>{email}</span>
             </div>
         </div>
