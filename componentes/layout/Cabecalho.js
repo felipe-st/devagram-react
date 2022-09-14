@@ -4,43 +4,36 @@ import logoHorizontalImg from "../../public/imagens/logoHorizontal.svg";
 import imagemLupa from "../../public/imagens/lupa.svg";
 import Navegacao from "./Navegacao";
 import ResultadoPesquisa from "./ResultadoPesquisa";
+import UsuarioService from "../../services/UsuarioService";
+import { useRouter } from "next/router";
+
+const usuarioService = new UsuarioService();
 
 export default function Cabecalho() {
     const [resultadoPesquisa, setResultadoPesquisa] = useState([]);
-    const [termoPesquisado, setTermoPesquisado] = useState([]);
+    const [termoPesquisado, setTermoPesquisado] = useState('');
+    const router = useRouter();
 
-    const aoPesquisar = (e) => {
+    const aoPesquisar = async (e) => {
         setTermoPesquisado(e.target.value);
         setResultadoPesquisa([]);
 
-        if (termoPesquisado.length < 3) {
+        if (e.target.value.length < 3) {
             return;
         }
 
-        setResultadoPesquisa([
-            {
-                avatar: '',
-                nome: 'Minerva',
-                email: 'minerva@gmail.com',
-                _id: '12345'
-            },
-            {
-                avatar: '',
-                nome: 'Pallas',
-                email: 'pallas@gmail.com',
-                _id: '54321'
-            },
-            {
-                avatar: '',
-                nome: 'Pitty',
-                email: 'pitty@gmail.com',
-                _id: '987654'
-            },
-        ])
+        try {
+            const { data } = await usuarioService.pesquisar(termoPesquisado);
+            setResultadoPesquisa(data);
+        } catch (error) {
+            alert('Erro ao pesquisar usuario ' + error?.response?.data?.erro);
+        }
     }
 
     const aoClicarResultadoDaPesquisa = (id) => {
-        console.log('aoClicarResultadoDaPesquisa', {id});        
+        setResultadoPesquisa([]);
+        setTermoPesquisado('');
+        router.push(`/perfil/${id}`);        
     }
 
     return (
