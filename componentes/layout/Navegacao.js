@@ -35,8 +35,8 @@ export default function Navegacao({ className }) {
     }, [router.asPath]);
 
     const definirRotaAtiva = () => {
-        const chavesDoMapaDeRotas = Object.keys(mapaDeRotas)
-        const indiceAtivo = chavesDoMapaDeRotas.findIndex(chave => {
+        const chavesDoMapaDeRotas = Object.keys(mapaDeRotas);
+            const indiceAtivo = chavesDoMapaDeRotas.findIndex(chave => {
             return mapaDeRotas[chave].rotasAtivacao.includes(
                 window.location.pathname
             );
@@ -49,30 +49,43 @@ export default function Navegacao({ className }) {
         }
     }
 
-    console.log(rotaAtiva);
+    const obterImagem = (nomeRota) => {
+        const rotaAtivada = mapaDeRotas[nomeRota];
+
+        if (rotaAtiva === nomeRota) {
+            return rotaAtivada.imagemAtivo;
+        }
+
+        return rotaAtivada.imagemPadrao;
+    }
+
+    const aoClicarNoIcone = (nomeRota) => {
+        setRotaAtiva(nomeRota);
+        router.push(mapaDeRotas[nomeRota].rotasAtivacao[0])
+    }
 
     return (
         <nav className={`barraNavegacao ${className}`}>
             <ul>
-                <li>
+                <li onClick={() => aoClicarNoIcone('home')}>
                     <Image 
-                        src={imgHomeAtivo}
+                        src={obterImagem('home')}
                         alt='icone home'
                         width={20}
                         height={20}
                     />
                 </li>
-                <li>
+                <li onClick={() => aoClicarNoIcone('publicacao')}>
                     <Image 
-                        src={imgPublicacaoCinza}
+                        src={obterImagem('publicacao')}
                         alt='icone publicacao'
                         width={20}
                         height={20}
                     />
                 </li>
-                <li>
+                <li onClick={() => aoClicarNoIcone('perfil')}>
                     <Image 
-                        src={imgUsuarioCinza}
+                        src={obterImagem('perfil')}
                         alt='icone usuario'
                         width={20}
                         height={20}
