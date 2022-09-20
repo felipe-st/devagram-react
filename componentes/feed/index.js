@@ -41,14 +41,35 @@ export function Feed({ usuarioLogado }) {
                         mensagem: 'Muito bom'
                     }
                 ]
+            },
+            {
+                id: '3',
+                usuario: {
+                    id: '3',
+                    nome: 'Mocinha, a gatinha Sindicalista',
+                    avatar: null
+                },
+                fotoDoPost: 'https://publisher-publish.s3.eu-central-1.amazonaws.com/pb-brasil247/swp/jtjeq9/media/20180626210624_5b3293b679b75f796a50dbb7jpeg.jpeg',
+                descricao: 'O véio é chavoso!',
+                curtidas: [],
+                comentarios: [
+                    {
+                        nome: 'Minerva',
+                        mensagem: 'É 13!!!'
+                    }
+                ]
             }
         ])
     }, [usuarioLogado]);
 
     return (
-        <div className="feedContainer">
+        <div className="feedContainer largura30pctDesktop">
             {listaDePostagens.map(dadosPostagem => (
-                <Postagem key={dadosPostagem.id} {...dadosPostagem} />
+                <Postagem 
+                    key={dadosPostagem.id}
+                    {...dadosPostagem}
+                    usuarioLogado={usuarioLogado}
+                    />
             ))}
         </div>
     )
