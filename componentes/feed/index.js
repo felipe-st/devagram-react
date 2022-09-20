@@ -7,10 +7,31 @@ const feedService = new FeedService();
 export function Feed({ usuarioLogado }) {
     const [listaDePostagens, setListaDePostagens] = useState([]);
 
-    useEffect(async() => {
+    useEffect(() => {
+        async function postFeed() {
         const { data } = await feedService.carregarPostagens();
-        console.log(data)
-        setListaDePostagens([
+
+        const postagensFormatadas = data.map((postagem) => (
+            {
+                id: postagem._id,
+                usuario: {
+                    id: postagem.userId,
+                    nome: postagem.usuario.nome,
+                    avatar: postagem.usuario.avatar
+                },
+                fotoDoPost: postagem.foto,
+                descricao: postagem.descricao,
+                curtidas: postagem.likes,
+                comentarios: postagem.comentarios.map(c => ({
+                    nome: c.nome,
+                    mensagem: c.comentario
+                }))
+            }
+        ));
+
+        setListaDePostagens(postagensFormatadas);
+        
+        /* setListaDePostagens([
             {
                 id: '1',
                 usuario: {
@@ -62,7 +83,10 @@ export function Feed({ usuarioLogado }) {
                     }
                 ]
             }
-        ])
+        ]) */
+        }
+
+        postFeed();
     }, [usuarioLogado]);
 
     return (
