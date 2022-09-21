@@ -32,6 +32,7 @@ export function FazerComentario({ usuarioLogado, comentar }) {
                 rows={linhas}
                 onChange={aoDigitarComentario}
                 onKeyDown={aoPressionarQualquerTecla}
+                autoFocus={true}
                 value={comentario}
                 placeholder="Adicione um comentário...">
 
