@@ -8,17 +8,21 @@ import imgCurtido from '../../public/imagens/curtido.svg';
 import imgComentarioAtivo from '../../public/imagens/comentarioAtivo.svg';
 import imgComentarioCinza from '../../public/imagens/comentarioCinza.svg';
 import { FazerComentario } from "./fazerComentario";
+import FeedService from "../../services/FeedService";
 
 const tamanhoLimiteDescricao = 90;
+const feedService = new FeedService();
 
 
 export default function Postagem ({
+    id,
     usuario,
     fotoDoPost,
     descricao,
     comentarios,
     usuarioLogado
 }) {
+    const [comentariosPostagem, setComentariosPostagem] = useState(comentarios);
     const [deveExibirSecaoParaComentar, setDeveExibirSecaoParaComentar] = useState(false);
     const [tamanhoAtualDaDescricao, setTamanhoAtualDaDescricao] = useState(
         tamanhoLimiteDescricao
@@ -38,6 +42,30 @@ export default function Postagem ({
             mensagem += '...'
         }
         return mensagem;
+    }
+
+    const obterImagemComentario = () => {
+        return deveExibirSecaoParaComentar
+            ? imgComentarioAtivo
+            : imgComentarioCinza;
+    }
+
+    const comentar = async (comentario) => {
+        try {
+            await feedService.adicionarComentario(id, comentario);
+            setDeveExibirSecaoParaComentar(false);
+            setComentariosPostagem([
+                ...comentariosPostagem,
+                {
+                    nome: usuarioLogado.nome,
+                    mensagem: comentario
+                }
+            ])
+        } catch (e) {
+            alert(`Erro ao fazer comentario! ` + (e?.response?.data?.erro || ''));
+        }
+
+        return Promise.resolve(true);
     }
 
     return (
@@ -64,7 +92,7 @@ export default function Postagem ({
                     />
 
                     <Image
-                        src={imgComentarioCinza}
+                        src={obterImagemComentario()}
                         alt='icone comentar'
                         width={20}
                         height={20}
@@ -91,7 +119,7 @@ export default function Postagem ({
                 </div>
 
                 <div className="comentariosDaPublicacao">
-                    {comentarios.map((comentario, i) => (
+                    {comentariosPostagem.map((comentario, i) => (
                         <div className="comentario" key={i}>
                             <strong className="nomeUsuario">{comentario.nome}</strong>
                             <p className="descricao">{comentario.mensagem}</p>
@@ -101,7 +129,7 @@ export default function Postagem ({
             </div>
 
             {deveExibirSecaoParaComentar && 
-                <FazerComentario usuarioLogado={usuarioLogado} />
+                <FazerComentario comentar={comentar} usuarioLogado={usuarioLogado} />
             }
         </div>
     );
