@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import Botao from "../../componentes/botao";
 import CabecalhoComAcoes from "../../componentes/cabecalhoComAcoes";
@@ -5,13 +6,18 @@ import UploadImagem from "../../componentes/uploadImagem";
 import comAutorizacao from "../../hoc/comAutorizacao";
 import imagemPublicacao from '../../public/imagens/imagemPublicacao.svg';
 import imagemSetaEsquerda from '../../public/imagens/setaEsquerda.svg';
+import FeedService from "../../services/FeedService";
 
 const limiteDaDescricao = 255;
+const descricaoMinima = 3;
+const feedService = new FeedService();
+
 function Publicacao() {
     const [imagem, setImagem] = useState();
     const [descricao, setDescricao] = useState('');
     const [inputImagem, setInputImagem] = useState();
     const [etapaAtual, setEtapaAtual] = useState(1);
+    const router = useRouter();
 
     const estaNaEtapaUm = () => etapaAtual === 1;
 
@@ -46,7 +52,12 @@ function Publicacao() {
     }
 
     const aoClicarAcaoDireitaCabecalho = () => {
-        setEtapaAtual(2);
+        if (estaNaEtapaUm()) {
+            setEtapaAtual(2);
+            return;
+        }
+
+        publicar();
     }
 
     const escreverDescricao = (e) => {
@@ -64,6 +75,35 @@ function Publicacao() {
         }
 
         return 'segundaEtapa'
+    }
+
+    const publicar = async () => {
+        try {
+            if (!validarFormulario()) {
+                alert('A descrição precisa de pelo menos 3 caracteres e a imagem precisa estar selecionada.')
+                return;
+            } 
+
+            const corpoPublicacao = new FormData();
+            corpoPublicacao.append('descricao', descricao);
+            corpoPublicacao.append('file', imagem.arquivo);
+
+            await feedService.fazerPublicacao(corpoPublicacao);
+            router.push('/')
+        } catch (error) {
+            alert('Erro ao salvar publicação!');
+        }
+    }
+
+    const validarFormulario = () => {
+        if (descricao.length < descricaoMinima) {
+            return false;
+        }
+
+        return (
+            descricao.length >= descricaoMinima
+            && imagem?.arquivo
+        );
     }
 
     return (
