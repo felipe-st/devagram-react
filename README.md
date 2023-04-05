@@ -1,5 +1,4 @@
 # Devagram
-
 Projeto Desenvolvido para apresentação do react.js e next na formação Devaria 2022.
 
 ### Tecnologias Utilizadas
